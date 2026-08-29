@@ -1,1 +1,5 @@
 theme: jekyll-theme-minimal
+
+# tools/ 是本機開發用的工具，不要發佈到 GitHub Pages 網站上
+exclude:
+  - tools/
