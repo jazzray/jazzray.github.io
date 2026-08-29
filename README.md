@@ -2,8 +2,10 @@
 
 個人 GitHub Pages 站。
 
-## tools/
+## ai-workspace/（暫存，待搬遷）
 
-- [`tools/agent-memory/`](tools/agent-memory/) — 跨 Coding Agent 的開發狀態捕捉層。
-  讓 Claude Code / Codex / Gemini CLI / Antigravity / Grok / goose 之間切換時，
-  上下文與交接紀錄不會斷掉。（不會發佈到 Pages 網站）
+跨 Coding Agent 的開發狀態追蹤工具。**這個目錄會搬到私有 repo
+`jazzray/ai-workspace`**，暫存在此僅為了不遺失開發成果。
+
+搬遷完成後這個目錄與本分支都會被移除。已排除在 Jekyll 發佈之外，不會出現在
+公開網站上。

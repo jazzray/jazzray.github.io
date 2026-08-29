@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# setup.sh — 為多個 Coding Agent 掛上 ai-memory 的跨 Agent 記憶／交接層 (Layer 1 捕捉層)
+# setup.sh — 為 Coding Agent 掛上 ai-memory 的跨 Agent 記憶／交接層 (Layer 1 捕捉層)
 #
 # 預設為 DRY-RUN：只顯示會做什麼，不會動到任何 agent 的設定檔。
 # 確認無誤後加上 --apply 才會真的寫入。
@@ -137,45 +137,7 @@ for entry in "${AGENTS[@]}"; do
   fi
 done
 
-# ── 3. goose：MCP-only 模式 ───────────────────────────────────────────────────
-# goose 不在 ai-memory 的原生 hook 支援矩陣裡。goose 本身有 hooks（2026/02 起
-# 支援 HTTP hooks，SessionEnd 由 PR #7411 加入），但 block/goose 的
-# documentation/docs/guides/ 下沒有 hooks.md，schema 未公開且隨版本變動，
-# 因此這裡不猜測寫死設定，改走兩條可驗證的路：
-#   (a) 把 ai-memory 當成 goose 的 MCP extension（goose 原生支援 MCP）
-#   (b) 用 goose-wrap.sh 在 goose 離開後手動觸發 finalize-session
-head2 "3. goose（MCP-only，無原生 hook）"
-
-if selected "goose"; then
-  if command -v goose >/dev/null 2>&1; then
-    ok "偵測到 goose：$(command -v goose)"
-    if supports_client "goose"; then
-      run ai-memory install-mcp --client goose --apply
-      ok "goose 的 MCP 已由 ai-memory 直接設定"
-    else
-      warn "ai-memory install-mcp 不支援 client 'goose'，請手動加 extension："
-      cat <<'GOOSE'
-
-     執行 goose configure → 選 "Add Extension" → "Command-line Extension"
-       Name:    ai-memory
-       Command: ai-memory
-       Args:    mcp
-     （實際的 stdio 子指令請以 ai-memory --help 為準）
-
-     設定檔通常在 ~/.config/goose/config.yaml 的 extensions: 區塊。
-GOOSE
-    fi
-    info ""
-    info "  session 結束時的記憶固化，請改用本目錄的 wrapper 啟動 goose："
-    info "    ${B}./goose-wrap.sh session${N}"
-  else
-    warn "本機找不到 goose，跳過。"
-  fi
-else
-  info "（未選取 goose）"
-fi
-
-# ── 4. 收尾 ───────────────────────────────────────────────────────────────────
+# ── 3. 收尾 ───────────────────────────────────────────────────────────────────
 head2 "完成"
 if [ "$APPLY" -eq 1 ]; then
   ok "已套用設定。"
@@ -187,6 +149,10 @@ if [ "$APPLY" -eq 1 ]; then
   info ""
   info "首次使用建議先種入既有專案歷史："
   info "  cd <你的專案> && ai-memory bootstrap"
+  info ""
+  warn "Codex 與 Antigravity 沒有自動 SessionEnd —— 用 wrapper 啟動才會固化記憶："
+  info "  ./agent-wrap.sh codex"
+  info "  ./agent-wrap.sh antigravity"
 else
   warn "這是 DRY-RUN，什麼都沒有變更。"
   info "確認上面的指令沒問題後，重跑：${B}$0 --apply${N}"

@@ -1,5 +1,5 @@
 theme: jekyll-theme-minimal
 
-# tools/ 是本機開發用的工具，不要發佈到 GitHub Pages 網站上
+# ai-workspace/ 是待搬遷到私有 repo 的本機開發工具，不要發佈到 Pages 網站
 exclude:
-  - tools/
+  - ai-workspace/
