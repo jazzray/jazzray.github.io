@@ -1,7 +1,0 @@
-# 排程執行記錄
-.sync.log
-
-# agent-wrap 暫存
-.ai-memory-handoff.md
-
-.DS_Store

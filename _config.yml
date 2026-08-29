@@ -1,5 +1,1 @@
 theme: jekyll-theme-minimal
-
-# ai-workspace/ 是待搬遷到私有 repo 的本機開發工具，不要發佈到 Pages 網站
-exclude:
-  - ai-workspace/
